@@ -3,324 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FTB Translation — Демонстрація Смарт-вікна та Коду звернення (#XXXX)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>FTB Translation — Інтерактивна демонстрація системи</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
+      --ftb-blue: #0056b3;
+      --ftb-dark: #1a202c;
+      --ftb-light: #f8fafc;
       --viber: #7360f2;
       --telegram: #229ed9;
       --whatsapp: #25d366;
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #334155;
+      --zoho: #d9381e;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    
-    header { text-align: center; margin-bottom: 30px; padding: 20px 0; border-bottom: 1px solid var(--border); }
-    header h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    header p { color: var(--text-muted); font-size: 15px; }
+    body { background: #edf2f7; color: #2d3748; line-height: 1.5; padding-bottom: 60px; }
 
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    /* Top banner */
+    .top-bar { background: var(--ftb-blue); color: #fff; padding: 14px 20px; text-align: center; }
+    .top-bar h1 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; }
+    .top-bar p { font-size: 14px; opacity: 0.9; margin-top: 4px; }
 
-    /* Mock Site Box */
-    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
-    .panel h2 { font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    
-    .site-preview { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 20px; position: relative; }
-    .site-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 16px; }
-    .site-logo { font-weight: 700; color: #38bdf8; font-size: 16px; }
-    .site-badge { background: #0369a1; color: #e0f2fe; padding: 4px 8px; border-radius: 6px; font-size: 11px; }
+    .main-wrapper { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
 
-    .service-card { background: #1e293b; padding: 16px; border-radius: 10px; margin-bottom: 20px; }
-    .service-card h3 { font-size: 16px; margin-bottom: 6px; color: #fff; }
-    .service-card p { font-size: 13px; color: var(--text-muted); }
+    /* Mode selector tabs */
+    .flow-tabs { display: flex; gap: 12px; margin-bottom: 24px; justify-content: center; flex-wrap: wrap; }
+    .flow-tab { background: #fff; border: 2px solid #cbd5e0; padding: 12px 20px; border-radius: 30px; font-weight: 600; font-size: 15px; color: #4a5568; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .flow-tab.active { background: var(--ftb-blue); color: #fff; border-color: var(--ftb-blue); box-shadow: 0 4px 12px rgba(0,86,179,0.3); }
 
-    /* Messenger Buttons */
-    .messengers-title { font-size: 13px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-    .btn-group { display: flex; flex-direction: column; gap: 10px; }
-    .msg-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; transition: all 0.2s; text-decoration: none; }
-    .msg-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .msg-btn.viber { background: var(--viber); }
-    .msg-btn.telegram { background: var(--telegram); }
-    .msg-btn.whatsapp { background: var(--whatsapp); }
-    .btn-meta { font-size: 11px; opacity: 0.85; font-weight: 400; }
+    /* Step containers */
+    .scenario-box { background: #fff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0; }
+    .scenario-header { background: #f7fafc; padding: 20px 24px; border-bottom: 1px solid #e2e8f0; }
+    .scenario-header h2 { font-size: 18px; font-weight: 700; color: var(--ftb-dark); display: flex; align-items: center; gap: 10px; }
+    .scenario-header p { font-size: 14px; color: #718096; margin-top: 4px; }
 
-    /* Floating Toast Code */
-    .code-toast { display: none; margin-top: 15px; padding: 12px 16px; background: #065f46; border: 1px solid #059669; border-radius: 8px; color: #d1fae5; font-size: 13px; animation: fadeIn 0.3s ease; }
-    .code-toast b { font-size: 16px; color: #34d399; letter-spacing: 1px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 24px; }
+    @media (max-width: 860px) { .steps-grid { grid-template-columns: 1fr; } }
 
-    /* CRM Simulation */
-    .crm-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
-    .crm-table th { text-align: left; padding: 8px 10px; background: #0f172a; color: var(--text-muted); border-bottom: 1px solid #334155; }
-    .crm-table td { padding: 10px; border-bottom: 1px solid #334155; color: #e2e8f0; }
-    .status-tag { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; display: inline-block; }
-    .status-buffer { background: #854d0e; color: #fef08a; }
-    .status-active { background: #166534; color: #bbf7d0; }
-    .status-archive { background: #374151; color: #9ca3af; }
+    .step-col { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
+    .step-badge { background: #ebf8ff; color: #2b6cb0; font-size: 12px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; width: fit-content; }
+    .step-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #1a202c; }
+    .step-desc { font-size: 13px; color: #4a5568; margin-bottom: 16px; flex: 1; }
 
-    .search-box { display: flex; gap: 8px; margin-bottom: 12px; }
-    .search-input { flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 13px; }
-    .search-btn { background: var(--primary); border: none; border-radius: 8px; color: #fff; padding: 8px 14px; font-size: 13px; cursor: pointer; }
+    /* Interactive mock devices */
+    .mock-box { background: #fff; border: 1px solid #cbd5e0; border-radius: 10px; padding: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
 
-    /* Modal Styling */
-    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 999; justify-content: center; align-items: center; }
-    .modal-box { background: #1e293b; border: 1px solid #475569; border-radius: 16px; width: 90%; max-width: 440px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); animation: scaleIn 0.2s ease; position: relative; }
-    .modal-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
-    .modal-header { text-align: center; margin-bottom: 18px; }
-    .modal-header .icon-circle { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-    .modal-header h3 { font-size: 18px; margin-bottom: 4px; }
-    .modal-header p { font-size: 13px; color: var(--text-muted); }
+    /* Site buttons */
+    .site-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 16px; border-radius: 8px; border: none; font-weight: 600; font-size: 14px; color: #fff; cursor: pointer; margin-bottom: 10px; transition: transform 0.15s; }
+    .site-btn:hover { transform: translateY(-2px); }
+    .site-btn.viber { background: var(--viber); }
+    .site-btn.telegram { background: var(--telegram); }
+    .site-btn.whatsapp { background: var(--whatsapp); }
 
-    .modal-code-banner { background: #0f172a; border: 1px dashed #38bdf8; border-radius: 10px; padding: 12px; text-align: center; margin-bottom: 16px; }
-    .modal-code-banner .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
-    .modal-code-banner .val { font-size: 22px; font-weight: 700; color: #38bdf8; letter-spacing: 2px; }
+    /* Phone screen mockup */
+    .phone-mock { background: #2d3748; color: #fff; border-radius: 12px; padding: 16px; font-size: 13px; }
+    .phone-msg-bubble { background: #e2f8ff; color: #000; padding: 12px; border-radius: 12px 12px 0 12px; margin-left: auto; width: 90%; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 10px; }
 
-    .modal-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .modal-form label { font-size: 12px; color: var(--text-muted); }
-    .modal-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 14px; }
-    .modal-submit { background: #10b981; border: none; border-radius: 8px; padding: 12px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
-    .modal-submit:hover { background: #059669; }
+    /* CRM card mockup */
+    .crm-card { background: #fff; border-left: 4px solid var(--ftb-blue); padding: 12px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 12px; margin-top: 8px; }
+    .crm-tag { font-size: 10px; background: #feebc8; color: #7b341e; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
 
-    .modal-divider { text-align: center; position: relative; margin: 16px 0; font-size: 11px; color: var(--text-muted); }
-    .modal-divider::before { content: ""; position: absolute; left: 0; top: 50%; width: 42%; height: 1px; background: #334155; }
-    .modal-divider::after { content: ""; position: absolute; right: 0; top: 50%; width: 42%; height: 1px; background: #334155; }
+    /* Live Action Trigger Buttons */
+    .action-btn { background: var(--ftb-blue); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
+    .action-btn:hover { background: #004494; }
 
-    .modal-app-btn { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0; font-size: 13px; cursor: pointer; font-weight: 500; }
-    .modal-app-btn:hover { background: #1e293b; border-color: #64748b; }
+    /* Modal on Mock Site */
+    .mini-modal { background: #fff; border: 2px solid #3182ce; border-radius: 12px; padding: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+    .mini-modal h4 { font-size: 15px; color: #2b6cb0; margin-bottom: 6px; }
+    .mini-code-tag { font-size: 20px; font-weight: 800; color: #2b6cb0; letter-spacing: 2px; text-align: center; background: #ebf8ff; padding: 8px; border-radius: 6px; margin: 10px 0; border: 1px dashed #bee3f8; }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .highlight-box { background: #fffaf0; border: 1px solid #feebc8; border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 13px; color: #7b341e; }
+    .highlight-box b { color: #9c4221; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <h1>Демонстрація: Смарт-вікно та Код звернення (#XXXX)</h1>
-    <p>Інтерактивний тестовий прототип для FTB Translation (Олександра, Юлія, Владислав)</p>
-  </header>
-
-  <div class="grid">
-    <!-- LEFT: User Site View -->
-    <div class="panel">
-      <h2>🌐 1. Як це бачить клієнт на сайті</h2>
-      <div class="site-preview">
-        <div class="site-header">
-          <div class="site-logo">FTB Translation</div>
-          <div class="site-badge">Google Ads: Нотаріальний переклад</div>
-        </div>
-
-        <div class="service-card">
-          <h3>Нотаріальний переклад документів у Києві</h3>
-          <p>Офіційний переклад паспортів, дипломів, довіреностей з нотаріальним засвідченням за 24 години.</p>
-        </div>
-
-        <div class="messengers-title">Оберіть месенджер для зв'язку:</div>
-        <div class="btn-group">
-          <button class="msg-btn viber" onclick="openSmartModal('viber', 'Юлія Козаченко', '#7360f2')">
-            <span>🟣 Viber</span>
-            <span class="btn-meta">Менеджер: Юлія</span>
-          </button>
-          
-          <button class="msg-btn telegram" onclick="openSmartModal('telegram', 'Владислав Карпов', '#229ed9')">
-            <span>🔵 Telegram</span>
-            <span class="btn-meta">Менеджер: Владислав</span>
-          </button>
-
-          <button class="msg-btn whatsapp" onclick="openSmartModal('whatsapp', 'Чергування (Юлія / Влад)', '#25d366')">
-            <span>🟢 WhatsApp</span>
-            <span class="btn-meta">50/50 по черзі</span>
-          </button>
-        </div>
-
-        <div id="codeToast" class="code-toast">
-          ✅ <b>[#4892]</b> Номер вашого звернення згенеровано!<br>
-          <span style="font-size: 11px; opacity: 0.9;">У Telegram/WhatsApp код вставляється в текст автоматично. У Viber клієнт може назвати його при дзвінку.</span>
-        </div>
-      </div>
-      <p style="margin-top: 14px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-        💡 <b>Підказка:</b> Натисніть на будь-яку кнопку вище, щоб побачити Смарт-вікно для ПК або перевірити генерацію коду.
-      </p>
-    </div>
-
-    <!-- RIGHT: CRM View -->
-    <div class="panel">
-      <h2>🏛 2. Що відбувається в Zoho CRM</h2>
-      
-      <div class="search-box">
-        <input type="text" id="crmSearch" class="search-input" placeholder="Пошук за 4 цифрами коду (напр. 4892 або 1021)..." onkeyup="filterCrm()">
-        <button class="search-btn" onclick="filterCrm()">Знайти в CRM</button>
-      </div>
-
-      <table class="crm-table">
-        <thead>
-          <tr>
-            <th>Код</th>
-            <th>Час</th>
-            <th>Канал / Менеджер</th>
-            <th>Реклама (UTM)</th>
-            <th>Статус у CRM</th>
-          </tr>
-        </thead>
-        <tbody id="crmBody">
-          <tr data-code="4892">
-            <td><b style="color: #38bdf8;">#4892</b></td>
-            <td>14:51</td>
-            <td>🟣 Viber (Юлія)</td>
-            <td>Google / notary_kyiv</td>
-            <td><span class="status-tag status-buffer">Очікує підтвердження</span></td>
-          </tr>
-          <tr data-code="1022">
-            <td><b style="color: #38bdf8;">#1022</b></td>
-            <td>14:52</td>
-            <td>🔵 Telegram (Владислав)</td>
-            <td>Google / apostille_urgent</td>
-            <td><span class="status-tag status-active">Нова заявка (В роботі)</span></td>
-          </tr>
-          <tr data-code="7315">
-            <td><b style="color: #38bdf8;">#7315</b></td>
-            <td>Вчора 11:30</td>
-            <td>🟢 WhatsApp (Юлія)</td>
-            <td>Meta / legal_translation</td>
-            <td><span class="status-tag status-archive">Автоархів (24h)</span></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
-        <button onclick="simulateConfirm('4892')" style="background: #0284c7; border: none; border-radius: 6px; padding: 6px 12px; color: #fff; font-size: 11px; cursor: pointer;">
-          ▶ Симуляція: Юлія підтверджує дзвінок (#4892)
-        </button>
-        <button onclick="simulateDeduplication()" style="background: #475569; border: none; border-radius: 6px; padding: 6px 12px; color: #fff; font-size: 11px; cursor: pointer;">
-          ▶ Симуляція: Дедуплікація (Viber + TG)
-        </button>
-      </div>
-      <div id="crmNotice" style="margin-top: 12px; font-size: 12px; color: #38bdf8;"></div>
-    </div>
-  </div>
+<div class="top-bar">
+  <h1>FTB Translation — Як це працює в житті (Покрокова схема)</h1>
+  <p>Просте та наочне пояснення для Олександри, Юлії та Владислава</p>
 </div>
 
-<!-- Smart Modal Popup -->
-<div id="smartModal" class="modal-backdrop">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeSmartModal()">&times;</button>
-    <div class="modal-header">
-      <div id="modalIcon" class="icon-circle" style="background: #7360f2; color: #fff;">💬</div>
-      <h3 id="modalTitle">Зв'язатися у Viber</h3>
-      <p id="modalSub">Ваш персональний менеджер: <b id="modalManager">Юлія Козаченко</b></p>
-    </div>
+<div class="main-wrapper">
 
-    <div class="modal-code-banner">
-      <div class="label">Ваш унікальний номер звернення</div>
-      <div class="val" id="modalCode">#4892</div>
-    </div>
-
-    <!-- Quick Phone Capture -->
-    <div class="modal-form">
-      <label>Залиште номер — менеджер зв'яжеться з вами за 3 хв:</label>
-      <input type="tel" id="clientPhone" class="modal-input" placeholder="+380 (XX) XXX-XX-XX" value="+380">
-      <button class="modal-submit" onclick="submitPhoneLead()">📞 Надіслати номер менеджеру</button>
-    </div>
-
-    <div class="modal-divider">АБО ПЕРЕЙДІТЬ У ДОДАТОК</div>
-
-    <button class="modal-app-btn" onclick="openDirectApp()">
-      🚀 Відкрити додаток на комп'ютері
+  <!-- TAB SELECTOR -->
+  <div class="flow-tabs">
+    <button class="flow-tab active" onclick="switchScenario(1)">
+      <span>🟣</span> Сценарій 1: Клієнт телефонує або пише у Viber
+    </button>
+    <button class="flow-tab" onclick="switchScenario(2)">
+      <span>🔵</span> Сценарій 2: Клієнт пише в Telegram / WhatsApp
+    </button>
+    <button class="flow-tab" onclick="switchScenario(3)">
+      <span>💻</span> Сценарій 3: Смарт-вікно на комп'ютері (без Viber Desktop)
     </button>
   </div>
+
+  <!-- SCENARIO 1: VIBER -->
+  <div id="scenario1" class="scenario-box">
+    <div class="scenario-header">
+      <h2>🟣 Сценарій 1: Клієнт клікнув Viber о 14:51, а подзвонив Юлії о 15:15</h2>
+      <p>Показує, як Юлія за 2 секунди прив'язує дзвінок клієнта до його реклами Google Ads за допомогою 4 цифр.</p>
+    </div>
+
+    <div class="steps-grid">
+      <!-- Step 1 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 1 на сайті (14:51)</span>
+        <div class="step-title">Клієнт на сайті тисне Viber</div>
+        <div class="step-desc">
+          Відвідувач шукає нотаріальний переклад з реклами Google. Натискає іконку Viber.
+        </div>
+        <div class="mock-box">
+          <button class="site-btn viber" onclick="triggerViberStep1()">
+            <span>🟣 Написати у Viber</span>
+            <span style="font-size:11px;">Клікніть мене</span>
+          </button>
+          <div id="viberStep1Result" style="display:none; margin-top:10px; font-size:12px; color:#2b6cb0; background:#ebf8ff; padding:8px; border-radius:6px;">
+            ✅ <b>Код: #4892</b><br>
+            Картка з рекламою 1st-Touch уже в Zoho CRM!
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 2 в розмові (15:15)</span>
+        <div class="step-title">Клієнт телефонує Юлії</div>
+        <div class="step-desc">
+          Клієнт набрав Юлію через 24 хвилини. Юлія приймає виклик і коротко запитує 4 цифри.
+        </div>
+        <div class="mock-box">
+          <div style="font-size:12px; line-height:1.4; color:#2d3748;">
+            <b>Юлія:</b> <i>«Доброго дня! Бюро FTB. Підкажіть 4 цифри коду звернення з сайту?»</i><br><br>
+            <b>Клієнт:</b> <i>«У мене на екрані пише <b>4892</b>»</i>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 3 в Zoho CRM (15:16)</span>
+        <div class="step-title">Юлія відкриває картку</div>
+        <div class="step-desc">
+          Юлія вводить <b>4892</b> у пошук Zoho CRM ➔ картка миттєво відкривається!
+        </div>
+        <div class="mock-box">
+          <input type="text" id="viberCrmInput" placeholder="Введіть 4892..." style="width:100%; padding:6px 10px; border:1px solid #cbd5e0; border-radius:6px; font-size:12px; margin-bottom:8px;">
+          <button class="action-btn" onclick="checkViberCrm()">🔍 Знайти в Zoho CRM</button>
+          
+          <div id="viberCrmResult" style="display:none;" class="crm-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <b style="color:#2b6cb0;">Угода #4892</b>
+              <span class="crm-tag">Google Ads: Нотаріальний</span>
+            </div>
+            <div style="margin-top:4px; font-size:11px; color:#4a5568;">
+              Час кліку: 14:51 | Менеджер: Юлія Козаченко<br>
+              <b>Статус:</b> <span style="color:#276749; font-weight:700;">Переведено в роботу ✅</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 2: TG / WA -->
+  <div id="scenario2" class="scenario-box" style="display:none;">
+    <div class="scenario-header">
+      <h2>🔵 Сценарій 2: Клієнт пише в Telegram або WhatsApp</h2>
+      <p>Код вставляється в повідомлення автоматично — клієнту треба лише натиснути «Відправити».</p>
+    </div>
+
+    <div class="steps-grid">
+      <!-- Step 1 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 1 на сайті</span>
+        <div class="step-title">Клієнт обирає Telegram</div>
+        <div class="step-desc">Натискає на іконку месенджера на сайті.</div>
+        <div class="mock-box">
+          <button class="site-btn telegram" onclick="triggerTgStep1()">
+            <span>🔵 Написати в Telegram</span>
+            <span style="font-size:11px;">Клікніть</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 2 у додатку</span>
+        <div class="step-title">Що відкривається у клієнта</div>
+        <div class="step-desc">У полі вводу Telegram уже стоїть готовий текст з кодом:</div>
+        <div class="mock-box phone-mock">
+          <div style="font-size:11px; color:#a0aec0;">Чат: Владислав (FTB Translation)</div>
+          <div class="phone-msg-bubble">
+            <b>[#5319]</b> Доброго дня! Хочу дізнатися вартість перекладу документів...
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 3 у Владислава</span>
+        <div class="step-title">Владислав бачить код у чаті</div>
+        <div class="step-desc">Владислав копіює <b>5319</b> ➔ вставляє в Zoho CRM ➔ угода одразу знайдена з рекламою Google Ads.</div>
+        <div class="mock-box crm-card">
+          <b style="color:#2b6cb0;">Угода #5319 (Telegram)</b>
+          <div style="font-size:11px; color:#4a5568; margin-top:4px;">
+            Менеджер: Владислав Карпов<br>
+            UTM: Google / apostille_urgent<br>
+            <span style="color:#276749; font-weight:700;">100% прив'язка до реклами</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 3: SMART MODAL -->
+  <div id="scenario3" class="scenario-box" style="display:none;">
+    <div class="scenario-header">
+      <h2>💻 Сценарій 3: Клієнт на комп'ютері без встановленого Viber Desktop</h2>
+      <p>Захист від пустих кліків — клієнт залишає номер телефону в 1 клік прямо на сайті.</p>
+    </div>
+
+    <div class="steps-grid">
+      <!-- Step 1 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 1 на комп'ютері</span>
+        <div class="step-title">Клік на Viber з ПК</div>
+        <div class="step-desc">У клієнта на комп'ютері немає додатка Viber. Замість помилки відкривається акуратне вікно:</div>
+        <div class="mock-box">
+          <div class="mini-modal">
+            <h4>Зв'язатися з Юлією у Viber</h4>
+            <div class="mini-code-tag">#7821</div>
+            <input type="text" id="demoPhone" value="+380 98 337 13 37" style="width:100%; padding:8px; border:1px solid #cbd5e0; border-radius:6px; font-size:12px; margin-bottom:8px;">
+            <button class="action-btn" style="background:#38a169;" onclick="triggerPhoneSubmit()">📞 Надіслати номер менеджеру</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 2 в CRM</span>
+        <div class="step-title">Юлія миттєво отримує номер</div>
+        <div class="step-desc">У CRM падає готова заявка з номером телефону та рекламними мітками:</div>
+        <div id="phoneCrmBox" class="mock-box crm-card">
+          <b style="color:#276749;">Нова заявка з сайту (Viber)</b>
+          <div style="font-size:11px; margin-top:4px; color:#4a5568;">
+            <b>Телефон:</b> +380 98 337 13 37<br>
+            <b>Менеджер:</b> Юлія Козаченко<br>
+            <b>Джерело:</b> Google Ads (Нотаріальний)
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-col">
+        <span class="step-badge">Крок 3 результат</span>
+        <div class="step-title">0% втрачених клієнтів</div>
+        <div class="step-desc">
+          Юлія за 2 хвилини пише клієнту у Viber або телефонує сама. Клієнт приємно вражений швидкістю!
+        </div>
+        <div class="mock-box" style="background:#f0fff4; border:1px solid #c6f6d5; padding:12px; border-radius:8px; font-size:12px; color:#22543d;">
+          🎉 <b>Результат:</b><br>
+          Немає «пустих кліків», менеджер має готовий контакт, а реклама зафіксована зі 100% точністю.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <b>Підсумок для Олександри:</b><br>
+    Система вирішує всі проблеми: відсутність програм на ПК, затримки між кліком і дзвінком на 30 хвилин чи 20 годин, та плутанину між менеджерами. Жодні складні налаштування воронки в Zoho CRM не ламаються!
+  </div>
+
 </div>
 
 <script>
-  var currentChannel = 'viber';
-  var currentCode = '4892';
+  function switchScenario(num) {
+    document.querySelectorAll('.scenario-box').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.flow-tab').forEach(el => el.classList.remove('active'));
 
-  function openSmartModal(channel, manager, color) {
-    currentChannel = channel;
-    currentCode = Math.floor(1000 + Math.random() * 9000).toString();
-    
-    document.getElementById('modalCode').innerText = '#' + currentCode;
-    document.getElementById('modalTitle').innerText = 'Зв\'язатися у ' + (channel === 'viber' ? 'Viber' : channel === 'telegram' ? 'Telegram' : 'WhatsApp');
-    document.getElementById('modalManager').innerText = manager;
-    document.getElementById('modalIcon').style.background = color;
-    document.getElementById('modalIcon').innerText = channel === 'viber' ? '🟣' : channel === 'telegram' ? '🔵' : '🟢';
-
-    document.getElementById('smartModal').style.display = 'flex';
+    document.getElementById('scenario' + num).style.display = 'block';
+    event.currentTarget.classList.add('active');
   }
 
-  function closeSmartModal() {
-    document.getElementById('smartModal').style.display = 'none';
+  function triggerViberStep1() {
+    document.getElementById('viberStep1Result').style.display = 'block';
   }
 
-  function submitPhoneLead() {
-    var phone = document.getElementById('clientPhone').value;
-    if (phone.length < 8) {
-      alert('Будь ласка, введіть коректний номер телефону.');
-      return;
-    }
-    closeSmartModal();
-    
-    // Add to CRM Table
-    var tbody = document.getElementById('crmBody');
-    var row = document.createElement('tr');
-    row.setAttribute('data-code', currentCode);
-    row.innerHTML = '<td><b style="color: #34d399;">#' + currentCode + '</b></td>' +
-                    '<td>Зараз</td>' +
-                    '<td>' + (currentChannel === 'viber' ? '🟣 Viber' : currentChannel === 'telegram' ? '🔵 Telegram' : '🟢 WhatsApp') + '</td>' +
-                    '<td>Google / notary_kyiv (Тел: ' + phone + ')</td>' +
-                    '<td><span class="status-tag status-active">Нова заявка (Телефон отримано)</span></td>';
-    tbody.insertBefore(row, tbody.firstChild);
-
-    showToast('✅ Номер ' + phone + ' надіслано в Zoho CRM! Менеджер уже бачить заявку.');
-  }
-
-  function openDirectApp() {
-    closeSmartModal();
-    showToast('🚀 Код #' + currentCode + ' збережено. Відкриваємо ' + currentChannel + '...');
-  }
-
-  function showToast(text) {
-    var toast = document.getElementById('codeToast');
-    toast.innerHTML = text;
-    toast.style.display = 'block';
-    setTimeout(function() { toast.style.display = 'none'; }, 6000);
-  }
-
-  function filterCrm() {
-    var query = document.getElementById('crmSearch').value.trim().replace('#', '');
-    var rows = document.querySelectorAll('#crmBody tr');
-    rows.forEach(function(r) {
-      var code = r.getAttribute('data-code') || '';
-      var text = r.innerText;
-      if (!query || code.includes(query) || text.includes(query)) {
-        r.style.display = '';
-        if (query && code.includes(query)) {
-          r.style.background = '#1e3a5f';
-        } else {
-          r.style.background = '';
-        }
-      } else {
-        r.style.display = 'none';
-      }
-    });
-  }
-
-  function simulateConfirm(code) {
-    var row = document.querySelector('tr[data-code="' + code + '"]');
-    if (row) {
-      row.cells[4].innerHTML = '<span class="status-tag status-active">Нова заявка (Підтверджено Юлією)</span>';
-      row.style.background = '#064e3b';
-      document.getElementById('crmNotice').innerText = '🎉 Заявку #' + code + ' переведено в "Нова заявка" зі 100% збереженням міток реклами!';
+  function checkViberCrm() {
+    var val = document.getElementById('viberCrmInput').value.trim();
+    if (val === '4892' || val.includes('4892')) {
+      document.getElementById('viberCrmResult').style.display = 'block';
+    } else {
+      alert('Введіть 4892 у поле пошуку, щоб знайти заявку.');
     }
   }
 
-  function simulateDeduplication() {
-    document.getElementById('crmNotice').innerText = '🔗 Дедуплікація спрацювала: Номер +380983371337 у Telegram та Viber об\'єднано в 1 картку клієнта!';
+  function triggerTgStep1() {
+    alert('✅ Код [#5319] автоматично додано до тексту повідомлення в Telegram!');
+  }
+
+  function triggerPhoneSubmit() {
+    alert('✅ Номер успішно передано в Zoho CRM менеджеру Юлії!');
   }
 </script>
 
